@@ -2,7 +2,6 @@ const http = require('http');
 const User = require('./controller');
 const {getReqData} = require('./utils');
 
-
 const PORT = 3000 || 5000;
 
 const server = http.createServer(async (req, res) => {
@@ -15,8 +14,12 @@ const server = http.createServer(async (req, res) => {
         const user = await new User().getUsers();
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify(user));
-    }
-    else{
+    } else if(req.url.match(/\/api\/getUser\/([0-9]+)/) && req.method === 'GET') {
+        const id = req.url.split("/")[3];
+        const user = await new User().getUser(id);
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify(user));
+    } else {
         res.writeHead(404, {'Content-Type': 'text/html'});
         res.end(JSON.stringify({message: "Route not found"}));
     }

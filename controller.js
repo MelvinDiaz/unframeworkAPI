@@ -9,13 +9,18 @@ class Controller {
     }
     async getUser(id) {
         return new Promise((resolve, reject) => {
-            const user = data.filter(user => user.id === id);
+            const user = data.find((user) => user.id === parseInt(id));
+
             if(user)
                 resolve(user);
             else
                 reject({message: "User not found"});
+
+        }).catch((err) => {
+            console.error(err);
         });
     }
+    
     async createUser(user) {
         return new Promise((resolve, reject) => {
             let newUser = {
